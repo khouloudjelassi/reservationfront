@@ -12,4 +12,8 @@ export class RoomService {
   addRooms(body: any): Observable<any>{
     return this.http.post<any>(BACKEND_URL + '/room', body)
   }
+
+  getRoom():Observable<any>{
+    return this.http.get<any>(BACKEND_URL + '/room')
+  }
 }

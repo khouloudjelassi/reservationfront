@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { RoomService } from 'src/app/services/room.service';
@@ -6,11 +7,17 @@ import { RoomService } from 'src/app/services/room.service';
 @Component({
   selector: 'app-add-update-room',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './add-update-room.component.html',
  
 })
-export class AddUpdateRoomComponent {
+export class AddUpdateRoomComponent implements OnInit{
+rooms : any[] = [];
+
+name: string = "";
+capacity:number = 0;
+status : string = "";
+department : string = ""
 
   /***Form Group */
 roomForm: FormGroup = this.createFomRoom()
@@ -20,13 +27,15 @@ constructor(private fb: FormBuilder,
 ){
 
 }
+  ngOnInit(): void {
+this.getRoom()  }
 /*** create room form */
 createFomRoom(data?:any): FormGroup{
 return this.fb.group({
   name: [data && data?.name ? data?.name : '' ,[Validators.required]],
   capacity: [data && data?.capacity ? data?.capacity : 0, [Validators.required]],
   status: [data && data?.status ? data?.status : '', [Validators.required]],
-  departement: [data && data?.departement ? data?.departement : '', [Validators.required]],
+  department: [data && data?.department ? data?.department : '', [Validators.required]],
 })
 }
 createNewRomm(){
@@ -39,5 +48,11 @@ this.roomService.addRooms(this.roomForm.value).subscribe({
 
 }
 })
+}
+getRoom(){
+ 
+  this.roomService.getRoom().subscribe((data: any) => {
+    this.rooms = data;
+  });
 }
 }

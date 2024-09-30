@@ -35,9 +35,9 @@
             <div class="mt-2">
                 <select id="verified" name="verified" autocomplete="verified" required
                     class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                    formControlName="departement"  >
+                    formControlName="department"  >
                     <option value="software">Software</option>
-                    <option value="reseau">Reseau</option>
+                    <option value="reseau">Network</option>
                 </select>
             </div>
         </div>
@@ -49,3 +49,54 @@
         </div>
     </div>
 </form>
+<div>
+
+    <div class="mt-8 flow-root">
+        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <table class="min-w-full divide-y divide-gray-300">
+                    <thead>
+                        <tr>
+                            <th scope="col"
+                                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                                Room
+                                Name</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                               Capacity</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                               Status</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                               Department
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                Action
+                             </th>
+                            <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                                <span class="sr-only">Edit</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr *ngFor="let room of rooms">
+                            <td
+                                class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                               {{room.name}}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{room.capacity}}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{room.status}}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{room.department}}</td>
+                            <td
+                                class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                <!-- <a href="#" class="text-primary hover:text-primary">Edit<span class="sr-only">, Lindsay Walton</span></a> -->
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"></td>
+
+                        </tr>
+
+                        <!-- More people... -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
