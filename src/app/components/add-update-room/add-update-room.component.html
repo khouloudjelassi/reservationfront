@@ -1,0 +1,51 @@
+
+   
+        <form [formGroup]="roomForm">
+            <div class="mt-6 grid grid-cols-2 gap-4">
+        <div>
+            <label for="firstName" class="block text-sm font-medium leading-6 text-gray-900"> Room Name</label>
+            <div class="mt-2">
+                <input id="firstName" name="firstName" type="text" autocomplete="firstName" required
+                    class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                  formControlName="name" >
+            </div>
+        </div>
+        <div>
+            <label for="lastName" class="block text-sm font-medium leading-6 text-gray-900">Capacity</label>
+            <div class="mt-2">
+                <input id="lastName" name="lastName" type="text" autocomplete="lastName" required
+                    class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                    formControlName="capacity"   >
+            </div>
+        </div>
+      
+        <div>
+            <label for="type" class="block text-sm font-medium leading-6 text-gray-900">Status</label>
+            <div class="mt-2">
+                <select id="type" name="type" autocomplete="type" required
+                    class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                    formControlName="status"  >
+                    <option value="True">Available</option>
+                    <option value="false">Not available</option>
+                </select>
+            </div>
+        </div>
+        <div>
+            <label for="verified" class="block text-sm font-medium leading-6 text-gray-900">departement</label>
+            <div class="mt-2">
+                <select id="verified" name="verified" autocomplete="verified" required
+                    class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                    formControlName="departement"  >
+                    <option value="software">Software</option>
+                    <option value="reseau">Reseau</option>
+                </select>
+            </div>
+        </div>
+        <div class="flex items-center justify-between col-span-2">
+            <button type="submit" 
+                class="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                Add room
+            </button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,251 @@
+<nav class="bg-white shadow">
+    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex h-16 justify-between">
+            <div class="flex">
+                <div class="flex flex-shrink-0 items-center">
+                    <img class="block h-12 w-auto lg:hidden"
+                        src="https://iace.tn/wp-content/uploads/2017/11/OneTech.png" alt="Your Company" />
+                    <img class="hidden h-12 w-auto lg:block"
+                        src="https://iace.tn/wp-content/uploads/2017/11/OneTech.png" alt="Your Company" />
+                </div>
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                    <a [routerLink]="['/seats' , currentDate | date:'yyyy-MM-dd']" 
+                        class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Dashboard</a>
+                    <a href="#"
+                        class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Calendar</a>
+                </div>
+            </div>
+            <div class="hidden gap-x-4 sm:ml-6 sm:flex sm:items-center">
+                <div class="hidden sm:ml-6 sm:flex sm:space-x-8" *ngIf="user.type == 'admin'">
+                    <a [routerLink]="['/settings']"
+                        class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Settings</a>
+                </div>
+                <button 
+                (click)="logout()"
+                class=" bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded">
+                    Logout
+                </button>
+
+            </div>
+            <div class="-mr-2 flex items-center sm:hidden">
+                <!-- Mobile menu button -->
+                <button type="button"
+                    class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary"
+                    aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="sr-only">Open main menu</span>
+                    <!--
+              Icon when menu is closed.
+  
+              Menu open: "hidden", Menu closed: "block"
+            -->
+                    <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                    <!--
+              Icon when menu is open.
+  
+              Menu open: "block", Menu closed: "hidden"
+            -->
+                    <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                        aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</nav>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+
+
+    <h1 class="text-2xl font-bold leading-9 mt-8 text-primary">
+        Settings
+    </h1>
+    <p class="text-gray-500 mb-4">
+        Configure your application settings
+    </p>
+
+    <div>
+        <div class="sm:hidden">
+            <label for="tabs" class="sr-only">Select a tab</label>
+            <!-- Use an "onChange" listener to redirect the user to the selected tab URL. -->
+            <select id="tabs" name="tabs"
+                class="block w-full rounded-md border-gray-300 focus:border-primary focus:ring-primary">
+                <option>My Account</option>
+                <option>Company</option>
+                <option selected>Team Members</option>
+                <option>Billing</option>
+            </select>
+        </div>
+        <div class="hidden sm:block">
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                    <!-- Current: "border-primary text-primary", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+                    <a (click)="selectedTab = 'users'" [class.border-primary]="selectedTab === 'users'"
+                        [class.text-primary]="selectedTab === 'users'"
+                        class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium">
+                        <!-- Current: "text-primary", Default: "text-gray-400 group-hover:text-gray-500" -->
+                        <svg [class.text-primary]="selectedTab === 'users'"
+                            [class.text-gray-400]="selectedTab !== 'users'"
+                            class="text-gray-400 group-hover:text-gray-500 -ml-0.5 mr-2 h-5 w-5" viewBox="0 0 20 20"
+                            fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+                        </svg>
+                        <span>Users</span>
+                    </a>
+
+
+                    <a (click)="selectedTab = 'seats'" [class.border-primary]="selectedTab === 'seats'"
+                        [class.text-primary]="selectedTab === 'seats'"
+                        class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 group inline-flex items-center border-b-2 py-4 px-1 text-sm font-medium">
+                        <svg [class.text-primary]="selectedTab === 'seats'"
+                            [class.text-gray-400]="selectedTab !== 'seats'"
+                            class="text-primary group-hover:text-primary -ml-0.5 mr-2 h-5 w-5" viewBox="0 0 20 20"
+                            fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                                d="M2.5 4A1.5 1.5 0 001 5.5V6h18v-.5A1.5 1.5 0 0017.5 4h-15zM19 8.5H1v6A1.5 1.5 0 002.5 16h15a1.5 1.5 0 001.5-1.5v-6zM3 13.25a.75.75 0 01.75-.75h1.5a.75.75 0 010 1.5h-1.5a.75.75 0 01-.75-.75zm4.75-.75a.75.75 0 000 1.5h3.5a.75.75 0 000-1.5h-3.5z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <span>Rooms</span>
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+
+    <div *ngIf="selectedTab === 'users'">
+
+        <div>
+
+            <div class="mt-6 grid grid-cols-2 gap-4">
+                <div>
+                    <label for="firstName" class="block text-sm font-medium leading-6 text-gray-900">First Name</label>
+                    <div class="mt-2">
+                        <input id="firstName" name="firstName" type="text" autocomplete="firstName" required
+                            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                            [(ngModel)]="firstName">
+                    </div>
+                </div>
+                <div>
+                    <label for="lastName" class="block text-sm font-medium leading-6 text-gray-900">Last Name</label>
+                    <div class="mt-2">
+                        <input id="lastName" name="lastName" type="text" autocomplete="lastName" required
+                            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                            [(ngModel)]="lastName">
+                    </div>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
+                    <div class="mt-2">
+                        <input id="email" name="email" type="email" autocomplete="email" required
+                            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                            [(ngModel)]="email">
+                    </div>
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
+                    <div class="mt-2">
+                        <input id="password" name="password" type="password" required
+                            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                            [(ngModel)]="password">
+                    </div>
+                </div>
+                <div>
+                    <label for="type" class="block text-sm font-medium leading-6 text-gray-900">Type</label>
+                    <div class="mt-2">
+                        <select id="type" name="type" autocomplete="type" required
+                            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                            [(ngModel)]="type">
+                            <option value="admin">Admin</option>
+                            <option value="user">User</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label for="verified" class="block text-sm font-medium leading-6 text-gray-900">Verified</label>
+                    <div class="mt-2">
+                        <select id="verified" name="verified" autocomplete="verified" required
+                            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+                            [(ngModel)]="verified">
+                            <option value="true">True</option>
+                            <option value="false">False</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between col-span-2">
+                    <button type="submit" (click)="createUser()"
+                        class="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+                        Add user
+                    </button>
+                </div>
+            </div>
+
+
+
+
+
+        </div>
+        <div>
+
+            <div class="mt-8 flow-root">
+                <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                        <table class="min-w-full divide-y divide-gray-300">
+                            <thead>
+                                <tr>
+                                    <th scope="col"
+                                        class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                                        First
+                                        Name</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                        Last
+                                        Name</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                        Email
+                                        Address</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                        Type
+                                    </th>
+                                    <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                                        <span class="sr-only">Edit</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                                <tr *ngFor="let user of users">
+                                    <td
+                                        class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                        {{user.lastName}}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{user.lastName}}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{user.email}}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                        {{user.type.charAt(0).toUpperCase() + user.type.slice(1)}}</td>
+                                    <td
+                                        class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                                        <!-- <a href="#" class="text-primary hover:text-primary">Edit<span class="sr-only">, Lindsay Walton</span></a> -->
+                                    </td>
+                                </tr>
+
+                                <!-- More people... -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div *ngIf="selectedTab === 'seats'">
+    
+        <app-add-update-room></app-add-update-room>
+
+
+</div>
