@@ -9,6 +9,7 @@ import { SeatService } from 'src/app/services/seat.service';
   templateUrl: './seats.component.html',
   styleUrls: ['./seats.component.css']
 })
+
 export class SeatsComponent {
 
   date = this.route.snapshot.paramMap.get('date');

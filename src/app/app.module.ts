@@ -31,7 +31,6 @@ import { AddUpdateRoomComponent } from "./components/add-update-room/add-update-
     FormsModule,
     DialogModule,
     AddUpdateRoomComponent
-
     
 ],
   providers: [

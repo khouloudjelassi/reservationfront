@@ -16,4 +16,7 @@ export class RoomService {
   getRoom():Observable<any>{
     return this.http.get<any>(BACKEND_URL + '/room')
   }
+  deleteRoom(id:number):Observable<any>{
+return this.http.delete(BACKEND_URL + '/room/' + id)
+  }
 }
