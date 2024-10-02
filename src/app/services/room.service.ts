@@ -12,11 +12,16 @@ export class RoomService {
   addRooms(body: any): Observable<any>{
     return this.http.post<any>(BACKEND_URL + '/room', body)
   }
-
+ /** get  rooms */
   getRoom():Observable<any>{
     return this.http.get<any>(BACKEND_URL + '/room')
   }
+   /** delete room */
   deleteRoom(id:number):Observable<any>{
 return this.http.delete(BACKEND_URL + '/room/' + id)
   }
+   /** edit room */
+  editRoom(id:number, body:any):Observable<any>{
+    return this.http.put(BACKEND_URL + '/room/' + id, body)
+      }
 }

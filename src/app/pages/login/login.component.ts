@@ -21,7 +21,7 @@ export class LoginComponent {
     this.loginService.login({email: this.email, password: this.password}).subscribe({
       next: (data:any) => {
         localStorage.setItem('user', JSON.stringify(data));
-        this.router.navigate(['/seats', new Date().toISOString().split('T')[0]]); 
+        this.router.navigate(['/settings']);         
     }, error: (err:any) => {
       this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.errors[0] });    
     }

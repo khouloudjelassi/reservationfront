@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 import { SettingsComponent } from './components/settings/settings.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { AddUpdateRoomComponent } from "./components/add-update-room/add-update-room.component";
+import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { AddUpdateRoomComponent } from "./components/add-update-room/add-update-
     BrowserAnimationsModule,
     FormsModule,
     DialogModule,
-    AddUpdateRoomComponent
+    AddUpdateRoomComponent,
+    SweetAlert2Module.forRoot()
     
 ],
   providers: [

@@ -7,24 +7,26 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { CalendarComponent } from './components/calendar/calendar.component';
 
 const routes: Routes = [
-  // { path: '**', redirectTo: '/login' },
+  {    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',},
   { path: 'login', component: LoginComponent },
   { path: 'seats/:date', component: SeatsComponent , canActivate: [AuthGuard] },
   { path: 'settings', component: SettingsComponent  , canActivate: [AuthGuard] },
   { path: 'calendar', component: CalendarComponent  , canActivate: [AuthGuard] },
-  {
-    path: '',
-    children: [
-      {
-        path: 'main',
-        loadChildren: () =>
-          import('../app/dashboard/dashboard.module').then(
-            m => m.DashboardModule
-          ),
-        canActivate: [AuthGuard],
-      },
-    ]
-  }
+  // {
+  //   path: '',
+  //   children: [
+  //     {
+  //       path: 'main',
+  //       loadChildren: () =>
+  //         import('../app/dashboard/dashboard.module').then(
+  //           m => m.DashboardModule
+  //         ),
+  //       canActivate: [AuthGuard],
+  //     },
+  //   ]
+  // }
  
 ];
 

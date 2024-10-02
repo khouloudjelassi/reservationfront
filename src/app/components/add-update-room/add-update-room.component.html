@@ -35,14 +35,14 @@
             <div class="mt-2">
                 <select id="verified" name="verified" autocomplete="verified" required
                     class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-                    formControlName="departement"  >
+                    formControlName="department"  >
                     <option value="software">Software</option>
                     <option value="reseau">Reseau</option>
                 </select>
             </div>
         </div>
         <div class="flex items-center justify-between col-span-2 mt-3">
-            <button (click)="createNewRomm()" 
+            <button (click)="mode ? updateRoom() : createNewRomm()" 
                 class="flex w-full justify-center 
                 rounded-md bg-primary px-3 py-1.5 
                 text-sm font-semibold leading-6
@@ -74,13 +74,13 @@
                     {{ rowData[col.field] }}
                 </ng-container>
                 <ng-container *ngIf="col.header=== 'Actions'">
-                    <button (click)="selectRoom(rowData)">
+                    <button (click)="selectRoom(rowData, 'edit')">
                     <i class="pi pi-pen-to-square" style="color: #18a94e;" ></i>
                 </button>
-                    <button  (click)="openModal(rowData)">
+                    <button (click)="selectRoom(rowData, 'delete')" [swal]="deleteRecord" >
                     <i class="pi  pi-trash ml-3" style="color: #e64a4a;"></i>
                 </button >
-                    <button >
+                    <button (click)="selectRoom(rowData,'details')">
                     <i class="pi  pi-list-check ml-3" style="color: #706464;"></i>
             </button >
                 </ng-container>
@@ -90,8 +90,18 @@
         </ng-template>
     </p-table>
 </div>
-
-<p-dialog header="Delete Room" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+{{msg}}
+<swal
+  #deleteRecord
+  title="Delete Room?"
+  [text]="msg"
+  icon="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  (confirm)="deleteRoom(room.id)"
+>
+</swal>
+<!-- <p-dialog header="Delete Room" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
     <span class="p-text-secondary block mb-5">Are you sure to delete this room!</span>
     <div class="flex align-items-center gap-3 mb-3">
         <label for="username" class="font-semibold w-6rem">{{room.name}}</label>
@@ -100,4 +110,4 @@
         <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
         <p-button label="Save" (onClick)="visible = false; deleteRoom(room.id)" />
     </div>
-</p-dialog>
+</p-dialog> -->
