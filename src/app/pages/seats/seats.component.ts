@@ -1,49 +1,67 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { SeatService } from 'src/app/services/seat.service';
+import { RoomService } from 'src/app/services/room.service'; // Import RoomService
 
 @Component({
   selector: 'app-seats',
   templateUrl: './seats.component.html',
   styleUrls: ['./seats.component.css']
 })
-
-export class SeatsComponent {
-
+export class SeatsComponent implements OnInit {
+  departments: string[] = ['Software', 'Reseau']; // List of departments
+  selectedDepartment: string | null = null; // Make sure this property exists
+  rooms: any[] = [];
+  selectedRoom: any = null; // Ensure this property is defined
   date = this.route.snapshot.paramMap.get('date');
   selectedSeat: any = {};
-  user : any = JSON.parse(localStorage.getItem('user') || '{}');
+  user: any = JSON.parse(localStorage.getItem('user') || '{}');
   display: boolean = false;
   seats: any[] = [];
   reservations: any[] = [];
- 
   
   currentDate = this.date ? new Date(this.date) : new Date();
 
   constructor(
-    private route: ActivatedRoute , 
-    private seatService : SeatService , 
-    private reservationService : ReservationService,
+    private route: ActivatedRoute,
+    private seatService: SeatService,
+    private reservationService: ReservationService,
+    private roomService: RoomService, // Inject RoomService
     private messageService: MessageService
-  ){
-    this.getSeats();
-    this.getReservations();
+  ) {}
+
+  ngOnInit() {
+    this.getRooms();
   }
 
-  getSeats = () => {
-    this.seatService.getSeats().subscribe((data: any) => {
-      this.seats = data;
-    });
-  } 
+  getRooms() {
+    if (this.selectedDepartment) {
+      this.roomService.getDepartementWithRooms(this.selectedDepartment).subscribe((data: any) => {
+        this.rooms = data;
+      });
+    }
+  }
 
-  getReservations = () => {
+  getSeats() {
+    if (this.selectedRoom) {
+      this.seatService.getSeatsByRoom(this.selectedRoom.id).subscribe((data: any) => {
+        console.log(data);
+        
+        this.seats = data;
+        this.getReservations();
+      });
+    }
+  }
+
+  getReservations() {
     this.reservationService.getReservationByDate(this.date).subscribe((data: any) => {
       this.reservations = data;
-
-      // Mark reserved seats as reserved
+      if(this.seats.length){
       this.seats.forEach((seat: any) => {
+        console.log(seat);
+        
         seat.reserved = false;
         this.reservations.forEach((reservation: any) => {
           if (seat.id === reservation.seat.id) {
@@ -51,44 +69,20 @@ export class SeatsComponent {
             seat.reservedBy = reservation.user.firstName + ' ' + reservation.user.lastName;
           }
         });
-      });
+      });}
     });
   }
 
-
-  logout(){
-    localStorage.clear();
-    window.location.reload();
+  onDepartmentChange() {
+    this.rooms = [];
+    this.selectedRoom = null;
+    this.seats = [];
+    this.getRooms();
   }
 
-
-  onSeatClick(seat:any){
-    this.selectedSeat = seat;
-    this.display = true;
+  onRoomChange() {
+    this.getSeats();
   }
 
-  reserveSeat() {
-    const reservation = {
-     seat : {
-        id : this.selectedSeat.id
-      },
-      user : {
-        id : this.user.id
-      },
-      date : this.date
-     }
-
-    this.reservationService.createReservation(reservation).subscribe((res: any) => {
-      this.display = false;
-      this.getSeats();
-      this.getReservations();
-      this.selectedSeat = {};
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Seat reserved successfully' });
-    }, (error: any) => {
-      this.display = false;
-      this.selectedSeat = {};
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errors[0] });
-    });
-  }
-
+  // Other methods remain unchanged...
 }

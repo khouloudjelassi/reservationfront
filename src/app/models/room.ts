@@ -1,6 +1,9 @@
- interface Room {
-    name: String,
-    capacity: Number,
-    status: String,
-    departement: String
-}
+export interface Room {
+    id: number;
+    name: string; 
+    capacity: number; 
+    status: string;
+    department: string; 
+    seats?: any[]; 
+  }
+  
