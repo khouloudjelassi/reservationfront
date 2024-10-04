@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, HostListener, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { SeatService } from 'src/app/services/seat.service';
@@ -11,21 +11,31 @@ import { RoomService } from 'src/app/services/room.service';
   styleUrls: ['./seats.component.css']
 })
 export class SeatsComponent implements OnInit {
+
+ // HostListener for window load event
+ @HostListener('window:load', ['$event'])
+ onWindowLoad(event: Event): void {
+  this.router.navigate(['/settings']);  }
+
+/***array */
   departments: string[] = ['Software', 'Reseau'];
-  selectedDepartment: string | null = null;
   rooms: any[] = [];
   selectedRoom: any = null;
-  date = this.route.snapshot.paramMap.get('date');
   selectedSeat: any = {};
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
-  display: boolean = false;
   seats: any[] = [];
   reservations: any[] = [];
-  selectedDate: string = "";
+room: any = {}
+/***string */
+selectedDepartment: string | null = null;
+selectedDate: string = "";
 
-  currentDate: Date = this.date ? new Date(this.date) : new Date();
+/***boolean */
+display: boolean = false;
 
+search : boolean = false
   constructor(
+    private router: Router , 
     private route: ActivatedRoute,
     private seatService: SeatService,
     private reservationService: ReservationService,
@@ -34,8 +44,13 @@ export class SeatsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.getRooms();
-    this.getReservations(); // Load reservations for the initial date
+   this.seatService.getlistSeats().subscribe((res)=>{    
+    this.room= res
+      this.seats = res.seats
+    })
+    
+    // this.getRooms();
+    // this.getReservations(); // Load reservations for the initial date
   }
 
   getRooms() {
@@ -46,10 +61,6 @@ export class SeatsComponent implements OnInit {
     }
   }
 
-  logout() {
-    localStorage.clear();
-    window.location.reload();
-  }
 
   getSeats() {
     if (this.selectedRoom) {
@@ -61,7 +72,7 @@ export class SeatsComponent implements OnInit {
   }
 
   getReservations() {
-    this.reservationService.getReservationByDate(this.currentDate.toISOString().split('T')[0]).subscribe((data: any) => {
+    this.reservationService.getReservationByDate(new Date().toISOString().split('T')[0]).subscribe((data: any) => {
       this.reservations = data;
       if (this.seats.length) {
         this.seats.forEach((seat: any) => {
@@ -78,7 +89,6 @@ export class SeatsComponent implements OnInit {
   }
 
   getSeatsForDate() {
-    this.currentDate = new Date(this.selectedDate); // Update currentDate to the selected date
     this.getReservations(); // Refresh reservations for the new date
     this.getSeats(); // Get available seats for the new date
   }
@@ -116,7 +126,7 @@ export class SeatsComponent implements OnInit {
       user: {
         id: this.user.id
       },
-      date: this.currentDate.toISOString().split('T')[0] // Only keep the date part
+      date:new Date().toISOString().split('T')[0] // Only keep the date part
     };
 
     this.reservationService.createReservation(reservation).subscribe({

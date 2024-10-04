@@ -1,0 +1,52 @@
+<div class="container">
+<p-button label="Add new room" icon="pi pi-plus"
+ styleClass="p-button-sm add-room-button" (onClick)="selectRoom(null, 'add')"
+></p-button>
+</div>
+<div class="card flex justify-content-center  gap-3">
+    <div class="card">
+    <p-table [columns]="displayColumns" [value]="rooms" [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    {{ col.header }}
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+               
+                <td *ngFor="let col of columns">
+                    <ng-container *ngIf="col.header!= 'Actions'">
+                    {{ rowData[col.field] }}
+                </ng-container>
+                <ng-container *ngIf="col.header=== 'Actions'">
+                    <button (click)="selectRoom(rowData, 'edit')">
+                    <i class="pi pi-pen-to-square" style="color: #18a94e;" ></i>
+                </button>
+                    <button (click)="selectRoom(rowData, 'delete')" [swal]="deleteRecord" >
+                    <i class="pi  pi-trash ml-3" style="color: #e64a4a;"></i>
+                </button >
+                    <button (click)="selectRoom(rowData,'details')">
+                    <i class="pi  pi-list-check ml-3" style="color: #706464;"></i>
+            </button >
+                </ng-container>
+                </td>
+       
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+<swal
+  #deleteRecord
+  title="Delete Room?"
+  [text]="msg"
+  icon="question"
+  [showCancelButton]="true"
+  [focusCancel]="true"
+  (confirm)="deleteRoom(room.id)"
+>
+</swal>
+<p-dialog [header]="action === 'add' ? 'Add room' : 'Update Room'" [modal]="true" [(visible)]="visible" [style]="{ width: '60rem' }">
+  <app-add-update-room [roomData]="room" (modalClose)="visible= false"(refreshData) ="getRoom()"></app-add-update-room>
+</p-dialog>

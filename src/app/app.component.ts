@@ -7,4 +7,11 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'frontend';
+  user: any = JSON.parse(localStorage.getItem('user') || '{}');
+
+  logout(){
+    localStorage.clear();
+    window.location.reload();
+  }
+
 }

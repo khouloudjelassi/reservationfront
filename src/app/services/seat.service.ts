@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { BACKEND_URL } from '../config/config';
 import { Seat } from '../models/seat';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SeatService {
+  listSeats = new BehaviorSubject<Object>({});
 
   constructor(private http: HttpClient , private router: Router , private messageService: MessageService) { }
 
@@ -24,5 +25,10 @@ export class SeatService {
   getSeatsByRoom(roomId: number): Observable<Seat[]> {
     return this.http.get<Seat[]>(`${BACKEND_URL}/room/${roomId}`); // Adjust this URL according to your backend
   }
-  
+  setlistSeats(value: Object) {
+    this.listSeats.next(value);
+  }
+  getlistSeats(): Observable<any> {
+    return this.listSeats.asObservable();
+  }
 }

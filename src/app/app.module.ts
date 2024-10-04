@@ -5,15 +5,15 @@ import { AppRoutingModule } from './app-routing.module';
 import { ToastModule } from 'primeng/toast';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './pages/login/login.component';
-import { SeatsComponent } from './pages/seats/seats.component';
 import { MessageService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { SettingsComponent } from './components/settings/settings.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
 import { AddUpdateRoomComponent } from "./components/add-update-room/add-update-room.component";
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { ListRoomComponent } from "./components/list-room/list-room.component";
+import { SeatsComponent } from './components/seats/seats.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +21,6 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     LoginComponent,
     SeatsComponent,
     SettingsComponent,
-    CalendarComponent,
   ],
   imports: [
     BrowserModule,
@@ -33,8 +32,8 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     DialogModule,
     AddUpdateRoomComponent,
     FormsModule, // Add FormsModule here
-    SweetAlert2Module.forRoot()
-    
+    SweetAlert2Module.forRoot(),
+    ListRoomComponent
 ],
   providers: [
     MessageService,

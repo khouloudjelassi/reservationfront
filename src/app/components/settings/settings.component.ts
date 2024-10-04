@@ -29,11 +29,7 @@ export class SettingsComponent {
     this.getAllUsers();
   }
 
-  logout(){
-    localStorage.clear();
-    window.location.reload();
-  }
-
+ 
 
 
   getAllUsers() {
