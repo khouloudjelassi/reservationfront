@@ -32,6 +32,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     FormsModule,
     DialogModule,
     AddUpdateRoomComponent,
+    FormsModule, // Add FormsModule here
     SweetAlert2Module.forRoot()
     
 ],

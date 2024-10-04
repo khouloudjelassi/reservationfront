@@ -21,8 +21,9 @@ export class SeatsComponent implements OnInit {
   display: boolean = false;
   seats: any[] = [];
   reservations: any[] = [];
-  
-  currentDate = this.date ? new Date(this.date) : new Date();
+  selectedDate: string = "";
+
+  currentDate: Date = this.date ? new Date(this.date) : new Date();
 
   constructor(
     private route: ActivatedRoute,
@@ -34,6 +35,7 @@ export class SeatsComponent implements OnInit {
 
   ngOnInit() {
     this.getRooms();
+    this.getReservations(); // Load reservations for the initial date
   }
 
   getRooms() {
@@ -52,15 +54,14 @@ export class SeatsComponent implements OnInit {
   getSeats() {
     if (this.selectedRoom) {
       this.seatService.getSeatsByRoom(this.selectedRoom.id).subscribe((data: any) => {
-        console.log(data);
-        this.seats = data.seats || []; // Access the seats array
+        this.seats = data.seats || [];
         this.getReservations();
       });
     }
   }
 
   getReservations() {
-    this.reservationService.getReservationByDate(this.date).subscribe((data: any) => {
+    this.reservationService.getReservationByDate(this.currentDate.toISOString().split('T')[0]).subscribe((data: any) => {
       this.reservations = data;
       if (this.seats.length) {
         this.seats.forEach((seat: any) => {
@@ -76,6 +77,12 @@ export class SeatsComponent implements OnInit {
     });
   }
 
+  getSeatsForDate() {
+    this.currentDate = new Date(this.selectedDate); // Update currentDate to the selected date
+    this.getReservations(); // Refresh reservations for the new date
+    this.getSeats(); // Get available seats for the new date
+  }
+
   onDepartmentChange() {
     this.rooms = [];
     this.selectedRoom = null;
@@ -87,17 +94,42 @@ export class SeatsComponent implements OnInit {
     this.getSeats();
   }
 
+  onDateChange() {
+    this.getReservations(); // Fetch reservations for the newly selected date
+  }
+
   selectSeat(seat: any) {
-    this.selectedSeat = seat; // Set the selected seat
+    this.selectedSeat = seat;
     this.display = true; // Show the confirmation dialog
   }
 
   reserveSeat() {
-    // Logic to reserve the seat
-    // You may want to call a service here to save the reservation
-    console.log(`Reserving seat: ${this.selectedSeat.reference}`);
-    this.display = false; // Close the dialog
-  }
+    if (!this.selectedSeat) {
+      alert('Please select a seat.');
+      return;
+    }
 
- 
+    const reservation = {
+      seat: {
+        id: this.selectedSeat.id
+      },
+      user: {
+        id: this.user.id
+      },
+      date: this.currentDate.toISOString().split('T')[0] // Only keep the date part
+    };
+
+    this.reservationService.createReservation(reservation).subscribe({
+      next: (response) => {
+        this.selectedSeat.reserved = true;
+        this.selectedSeat.reservedBy = this.user.firstName + ' ' + this.user.lastName;
+        this.display = false; 
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Reservation successful!' });
+        this.getReservations(); 
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errors[0] });
+      }
+    });
+  }
 }

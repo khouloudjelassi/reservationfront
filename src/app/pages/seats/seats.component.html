@@ -1,93 +1,139 @@
-<div>
-  <nav class="bg-white shadow">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-      <div class="flex h-16 justify-between">
-        <div class="flex">
-          <div class="flex flex-shrink-0 items-center">
-            <img class="block h-12 w-auto lg:hidden" src="https://iace.tn/wp-content/uploads/2017/11/OneTech.png" alt="Your Company" />
-            <img class="hidden h-12 w-auto lg:block" src="https://iace.tn/wp-content/uploads/2017/11/OneTech.png" alt="Your Company" />
-          </div>
-          <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-            <a class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900">Dashboard</a>
-            <a [routerLink]="['/calendar']" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Calendar</a>
-          </div>
+<nav class="bg-white shadow">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 justify-between">
+      <div class="flex">
+        <div class="flex flex-shrink-0 items-center">
+          <img class="block h-12 w-auto lg:hidden" src="https://iace.tn/wp-content/uploads/2017/11/OneTech.png"
+            alt="Your Company" />
+          <img class="hidden h-12 w-auto lg:block" src="https://iace.tn/wp-content/uploads/2017/11/OneTech.png"
+            alt="Your Company" />
         </div>
-        <div class="hidden gap-x-4 sm:ml-6 sm:flex sm:items-center">
-          <div class="hidden sm:ml-6 sm:flex sm:space-x-8" *ngIf="user.type == 'admin'">
-            <a [routerLink]="['/settings']" class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Settings</a>
-          </div>
-          <button (click)="logout()" class="bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded">Logout</button>
-        </div>
-        <div class="-mr-2 flex items-center sm:hidden">
-          <button type="button" class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500" aria-controls="mobile-menu" aria-expanded="false">
-            <span class="sr-only">Open main menu</span>
-            <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-            <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+          <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+          <a
+            class="inline-flex items-center border-b-2 border-indigo-500 px-1 pt-1 text-sm font-medium text-gray-900">Dashboard</a>
+          <a [routerLink]="['/calendar']"
+            class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Calendar</a>
         </div>
       </div>
-    </div>
-  </nav>
-  
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <h1 class="text-2xl font-bold leading-9 mt-8 text-primary">
-      Seats reservation for {{currentDate | date}}
-    </h1>
-    
-    <div class="grid grid-cols-12 gap-4 mt-4">
-      <div class="col-span-8 sm:col-span-6">
-        <div class="flex items-center">
-          <label for="department" class="block text-sm font-medium text-gray-700 mr-6">Department:</label>
-          <select id="department" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()" 
-            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
-            <option value="" disabled selected>Select Department</option>
-            <option *ngFor="let department of departments" [value]="department">{{ department }}</option>
-          </select>
+      <div class="hidden gap-x-4 sm:ml-6 sm:flex sm:items-center">
+        <div class="hidden sm:ml-6 sm:flex sm:space-x-8" *ngIf="user.type == 'admin'">
+          <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+          <a [routerLink]="['/settings']"
+            class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">Settings</a>
         </div>
+        <button (click)="logout()" class=" bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded">
+          Logout
+        </button>
+
+      </div>
+      <div class="-mr-2 flex items-center sm:hidden">
+        <!-- Mobile menu button -->
+        <button type="button"
+          class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+          aria-controls="mobile-menu" aria-expanded="false">
+          <span class="sr-only">Open main menu</span>
+          <!--
+              Icon when menu is closed.
+  
+              Menu open: "hidden", Menu closed: "block"
+            -->
+          <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+          <!--
+              Icon when menu is open.
+  
+              Menu open: "block", Menu closed: "hidden"
+            -->
+          <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+</nav>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <h1 class="text-2xl font-bold leading-9 mt-8 text-primary">
+    Select a Seat
+  </h1>
+  <p class="text-gray-500 mb-4">
+    Please select a department and a room .
+  </p>
+
+  <div class="grid grid-cols-12 gap-4 mt-8">
+    <div class="col-span-6">
+      <div class="flex items-center">
+        <label for="department" class="block text-sm font-medium text-gray-700 mr-6">Department:</label>
+        <select id="department" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()"
+          class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
+          <option value="" disabled selected>Select Department</option>
+          <option *ngFor="let department of departments" [value]="department">{{ department }}</option>
+        </select>
+      </div>
+    </div>
+    
+    <div class="col-span-6" *ngIf="selectedDepartment">
+      <div class="flex items-center">
+        <label for="room" class="block text-sm font-medium text-gray-700 mr-3">Room:</label>
+        <select id="room" [(ngModel)]="selectedRoom" (change)="onRoomChange()"
+          class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+          [disabled]="!selectedDepartment">
+          <option value="" disabled selected>Select Room</option>
+          <option *ngFor="let room of rooms" [ngValue]="room">{{ room.name }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="col-span-6" *ngIf="selectedRoom">
+      <div class="flex items-center">
+        <label for="room" class="block text-sm font-medium text-gray-700 mr-11">Date:</label>
+        <input 
+        type="date" 
+        class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+        [(ngModel)]="selectedDate" 
+        (change)="onDateChange()">
       </div>
       
-      <div class="col-span-8 sm:col-span-6" *ngIf="selectedDepartment"> <!-- Show only if a department is selected -->
-        <div class="flex items-center">
-          <label for="room" class="block text-sm font-medium text-gray-700 mr-3">Room:</label>
-          <select id="room" [(ngModel)]="selectedRoom" (change)="onRoomChange()" 
-            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-            [disabled]="!selectedDepartment">
-            <option value="" disabled selected>Select Room</option>
-            <option *ngFor="let room of rooms" [ngValue]="room">{{ room.name }}</option>
-          </select>
-        </div>
-      </div>
     </div>
-    
-    
-    
-    <p class="text-gray-500 mb-4 mt-4">Select your seat</p>
-
-    <div class="grid grid-cols-6 mt-8 gap-4" *ngIf="seats.length > 0">
-      <div *ngFor="let seat of seats" class="flex flex-col justify-center items-center py-8 border-2 border-gray-200" [ngClass]="{'bg-green-100': seat.id === selectedSeat.id, 'bg-sky-200': seat.reserved}">
-        <div class="text-center">
-          <p>{{ seat.name }}</p>
-          <p>{{ seat.reference }}</p>
-          <button (click)="selectSeat(seat)" class="bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded">
-            Select
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Confirmation dialog -->
-    <p-dialog header="Seat reservation" [(visible)]="display" [modal]="true" [closable]="false" [resizable]="false" [baseZIndex]="10000" [style]="{width: '450px'}">
-      <p>
-        Do you want to reserve seat {{selectedSeat.reference}}? 
-      </p>
-      <div class="flex justify-end mt-4">
-        <button type="button" class="bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded" (click)="reserveSeat()">Yes</button>
-        <button type="button" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-4 rounded ml-4" (click)="display = false">No</button>
-      </div>
-    </p-dialog>
   </div>
+
+
+
+  <div class="grid grid-cols-6 mt-8 gap-4" *ngIf="selectedDate">
+    <!-- <button 
+      class="bg-primary text-white font-bold py-2 px-4 rounded" 
+      (click)="getSeatsForDate()">View Available Seats</button> -->
+  </div>
+
+  <p class="text-gray-500 mb-4 mt-4">Select your seat</p>
+
+  <div class="grid grid-cols-6 mt-8 gap-4" *ngIf="seats.length > 0">
+    <div *ngFor="let seat of seats" class="flex flex-col justify-center items-center py-8 border-2 border-gray-200" [ngClass]="{'bg-green-100': seat.id === selectedSeat.id, 'bg-sky-200': seat.reserved}">
+      <div class="text-center">
+        <p>{{ seat.name }}</p>
+        <p>{{ seat.reference }}</p>
+        <button (click)="selectSeat(seat)" class="bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded">
+          Select
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation dialog -->
+  <p-dialog header="Seat Reservation" [(visible)]="display" [modal]="true" [closable]="false" [resizable]="false" [baseZIndex]="10000" [style]="{width: '450px'}">
+    <p>
+      Do you want to reserve seat {{selectedSeat.reference}}? 
+    </p>
+    <div class="flex justify-end mt-4">
+      <button type="button" class="bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded" (click)="reserveSeat()">Yes</button>
+      <button type="button" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-4 rounded ml-4" (click)="display = false">No</button>
+    </div>
+  </p-dialog>
 </div>
