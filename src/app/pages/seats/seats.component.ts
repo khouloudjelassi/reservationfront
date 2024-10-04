@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { SeatService } from 'src/app/services/seat.service';
-import { RoomService } from 'src/app/services/room.service'; // Import RoomService
+import { RoomService } from 'src/app/services/room.service';
 
 @Component({
   selector: 'app-seats',
@@ -11,10 +11,10 @@ import { RoomService } from 'src/app/services/room.service'; // Import RoomServi
   styleUrls: ['./seats.component.css']
 })
 export class SeatsComponent implements OnInit {
-  departments: string[] = ['Software', 'Reseau']; // List of departments
-  selectedDepartment: string | null = null; // Make sure this property exists
+  departments: string[] = ['Software', 'Reseau'];
+  selectedDepartment: string | null = null;
   rooms: any[] = [];
-  selectedRoom: any = null; // Ensure this property is defined
+  selectedRoom: any = null;
   date = this.route.snapshot.paramMap.get('date');
   selectedSeat: any = {};
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
@@ -28,7 +28,7 @@ export class SeatsComponent implements OnInit {
     private route: ActivatedRoute,
     private seatService: SeatService,
     private reservationService: ReservationService,
-    private roomService: RoomService, // Inject RoomService
+    private roomService: RoomService,
     private messageService: MessageService
   ) {}
 
@@ -44,12 +44,16 @@ export class SeatsComponent implements OnInit {
     }
   }
 
+  logout() {
+    localStorage.clear();
+    window.location.reload();
+  }
+
   getSeats() {
     if (this.selectedRoom) {
       this.seatService.getSeatsByRoom(this.selectedRoom.id).subscribe((data: any) => {
         console.log(data);
-        
-        this.seats = data;
+        this.seats = data.seats || []; // Access the seats array
         this.getReservations();
       });
     }
@@ -58,18 +62,17 @@ export class SeatsComponent implements OnInit {
   getReservations() {
     this.reservationService.getReservationByDate(this.date).subscribe((data: any) => {
       this.reservations = data;
-      if(this.seats.length){
-      this.seats.forEach((seat: any) => {
-        console.log(seat);
-        
-        seat.reserved = false;
-        this.reservations.forEach((reservation: any) => {
-          if (seat.id === reservation.seat.id) {
-            seat.reserved = true;
-            seat.reservedBy = reservation.user.firstName + ' ' + reservation.user.lastName;
-          }
+      if (this.seats.length) {
+        this.seats.forEach((seat: any) => {
+          seat.reserved = false;
+          this.reservations.forEach((reservation: any) => {
+            if (seat.id === reservation.seat.id) {
+              seat.reserved = true;
+              seat.reservedBy = reservation.user.firstName + ' ' + reservation.user.lastName;
+            }
+          });
         });
-      });}
+      }
     });
   }
 
@@ -84,5 +87,17 @@ export class SeatsComponent implements OnInit {
     this.getSeats();
   }
 
-  // Other methods remain unchanged...
+  selectSeat(seat: any) {
+    this.selectedSeat = seat; // Set the selected seat
+    this.display = true; // Show the confirmation dialog
+  }
+
+  reserveSeat() {
+    // Logic to reserve the seat
+    // You may want to call a service here to save the reservation
+    console.log(`Reserving seat: ${this.selectedSeat.reference}`);
+    this.display = false; // Close the dialog
+  }
+
+ 
 }
