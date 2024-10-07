@@ -20,6 +20,7 @@ import { SeatService } from 'src/app/services/seat.service';
 })
 export class ListRoomComponent implements OnInit {
   /***array */
+  user: any = JSON.parse(localStorage.getItem('user') || '{}');
   room: any = {}
 rooms : any[] = [];
 seats: any[] = []

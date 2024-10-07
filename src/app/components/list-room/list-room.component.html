@@ -1,5 +1,5 @@
 <div class="container">
-<p-button label="Add new room" icon="pi pi-plus"
+<p-button label="Add new room" icon="pi pi-plus" *ngIf="user?.type==='admin'"
  styleClass="p-button-sm add-room-button" (onClick)="selectRoom(null, 'add')"
 ></p-button>
 </div>
@@ -21,12 +21,14 @@
                     {{ rowData[col.field] }}
                 </ng-container>
                 <ng-container *ngIf="col.header=== 'Actions'">
+                    <ng-container *ngIf="user?.type==='admin'">
                     <button (click)="selectRoom(rowData, 'edit')">
                     <i class="pi pi-pen-to-square" style="color: #18a94e;" ></i>
                 </button>
                     <button (click)="selectRoom(rowData, 'delete')" [swal]="deleteRecord" >
                     <i class="pi  pi-trash ml-3" style="color: #e64a4a;"></i>
                 </button >
+            </ng-container>
                     <button (click)="selectRoom(rowData,'details')">
                     <i class="pi  pi-list-check ml-3" style="color: #706464;"></i>
             </button >
