@@ -24,6 +24,8 @@ return this.http.delete(BACKEND_URL + '/room/' + id)
     return this.http.get(BACKEND_URL + '/room/' + id)
   }
   getDepartementWithRooms(dep :string):Observable<any>{
+    console.log(dep);
+    
     return this.http.get(BACKEND_URL + '/room/department/' + dep)
   }
 

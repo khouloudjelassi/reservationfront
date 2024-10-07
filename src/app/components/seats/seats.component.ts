@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/api';
 import { ReservationService } from 'src/app/services/reservation.service';
 import { SeatService } from 'src/app/services/seat.service';
 import { RoomService } from 'src/app/services/room.service';
+import { Room } from 'src/app/models/room';
 
 @Component({
   selector: 'app-seats',
@@ -19,8 +20,8 @@ export class SeatsComponent implements OnInit {
 
 /***array */
   departments: string[] = ['Software', 'Reseau'];
-  rooms: any[] = [];
-  selectedRoom: any = null;
+  rooms: Room[] = [];
+  selectedRoom: any = {};
   selectedSeat: any = {};
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
   seats: any[] = [];
@@ -46,16 +47,19 @@ search : boolean = false
   ngOnInit() {
    this.seatService.getlistSeats().subscribe((res)=>{    
     this.room= res
+     // this.selectedRoom = res.name
       this.seats = res.seats
+      //this.getRooms();
+      this.selectedRoom = res.name
     })
     
     // this.getRooms();
-    // this.getReservations(); // Load reservations for the initial date
+    // this.getReservations(); 
   }
 
   getRooms() {
     if (this.selectedDepartment) {
-      this.roomService.getDepartementWithRooms(this.selectedDepartment).subscribe((data: any) => {
+      this.roomService.getDepartementWithRooms(this.selectedDepartment).subscribe((data: any) => {        
         this.rooms = data;
       });
     }
@@ -65,6 +69,8 @@ search : boolean = false
   getSeats() {
     if (this.selectedRoom) {
       this.seatService.getSeatsByRoom(this.selectedRoom.id).subscribe((data: any) => {
+
+        
         this.seats = data.seats || [];
         this.getReservations();
       });
@@ -89,8 +95,8 @@ search : boolean = false
   }
 
   getSeatsForDate() {
-    this.getReservations(); // Refresh reservations for the new date
-    this.getSeats(); // Get available seats for the new date
+    this.getReservations(); 
+    this.getSeats(); 
   }
 
   onDepartmentChange() {
@@ -105,12 +111,12 @@ search : boolean = false
   }
 
   onDateChange() {
-    this.getReservations(); // Fetch reservations for the newly selected date
+    this.getReservations(); 
   }
 
   selectSeat(seat: any) {
     this.selectedSeat = seat;
-    this.display = true; // Show the confirmation dialog
+    this.display = true; 
   }
 
   reserveSeat() {

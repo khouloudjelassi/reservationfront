@@ -12,6 +12,8 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'seats', component: SeatsComponent , canActivate: [AuthGuard] },
   { path: 'settings', component: SettingsComponent  , canActivate: [AuthGuard] },
+  { path: 'seats/:date', component: SeatsComponent , canActivate: [AuthGuard] },
+
   // {
   //   path: '',
   //   children: [
