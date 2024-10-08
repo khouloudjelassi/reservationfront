@@ -62,21 +62,36 @@ getRoom(){
 }
 
 /***select room for more action (delete, update and list of seats) */
-selectRoom(element:any, mode:string){
-  this.room = element
-  this.msg = ''
-  this.action = mode
-  if(mode ==='delete'){
-   this.msg = `Are you sure to delete this room: "${element.name}" !`}
-   else if(mode ==='details'){
-    this.seats = element?.seats
-    this.seatsService.setlistSeats(element)
-    this.router.navigate(['/seats']); 
+// selectRoom(element:any, mode:string){
+//   this.room = element
+//   this.msg = ''
+//   this.action = mode
+//   if(mode ==='delete'){
+//    this.msg = `Are you sure to delete this room: "${element.name}" !`}
+//    else if(mode ==='details'){
+//     this.seats = element?.seats
+//     this.seatsService.setlistSeats(element)
+//     this.router.navigate(['/seats']); 
 
-   } else {
-    this.visible= true
-   }
+//    } else {
+//     this.visible= true
+//    }
+// }
+selectRoom(element: any, mode: string) {
+  this.room = element;
+  this.msg = '';
+  this.action = mode;
+  if (mode === 'delete') {
+    this.msg = `Are you sure to delete this room: "${element.name}"!`;
+  } else if (mode === 'details') {
+    this.seats = element?.seats;
+    this.seatsService.setlistSeats(element);
+    this.router.navigate(['/seats', element.department, element.name]); // Pass department and room name
+  } else {
+    this.visible = true;
+  }
 }
+
 /***delete room function */
 deleteRoom(id:number){
   this.roomService.deleteRoom(id).subscribe({

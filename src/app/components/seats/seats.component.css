@@ -1,0 +1,82 @@
+/* Base styling for the chair seat */
+.chair-seat {
+    position: relative;
+    width: 70px; /* Chair width */
+    height: 90px; /* Chair height */
+    margin: 20px; /* Space around each chair */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s; /* Smooth hover effect */
+}
+
+/* Styling for the chair itself */
+.chair {
+    width: 140%; /* Fit to parent */
+    height: 100%; /* Fit to parent */
+    background-color: #e6eff7; /* Clean background */
+    border: 1px solid #e0e0e0; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Deeper shadow */
+    transition: background-color 0.3s, transform 0.3s; /* Smooth transitions */
+}
+
+/* Hover effect */
+.chair:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    border-color: #ff9100; /* Change border color on hover */
+}
+
+/* Text styling */
+.seat-name, .seat-reference {
+    text-align: center;
+    font-size: 12px; /* Font size */
+    font-weight: 600; /* Bold text */
+    color: #333; /* Darker text color */
+}
+
+/* Reserved seat styling */
+.bg-gray-400 {
+    background-color: #f0f0f0; /* Gray for reserved seats */
+}
+
+/* Styling for the icon */
+.text-gray-400 {
+    color: #b0b0b0; /* Softer gray for reserved seat icons */
+}
+
+/* Main container styling */
+.container {
+    max-width: 1200px; /* Set a max width for the container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px; /* Padding around the content */
+}
+
+/* Centered cancel button styling */
+.chair-seat button {
+    position: absolute; /* Position it absolutely within chair-seat */
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Offset the button to perfectly center it */
+    background: none; /* No background */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor on hover */
+    padding: 0; /* No padding */
+    margin: 0; /* No margin */
+    display: none; /* Hidden by default */
+}
+
+/* Show button on hover */
+.chair-seat:hover button {
+    display: flex; /* Display as flex to center the icon */
+    color: red; /* Change color on hover */
+}
+
+/* Cancel button icon */
+.chair-seat button i {
+    font-size: 16px; /* Icon size */
+}

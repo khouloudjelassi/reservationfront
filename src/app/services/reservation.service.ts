@@ -23,6 +23,11 @@ export class ReservationService {
     return this.http.post(`${BACKEND_URL}/reservation`, reservation);
   }
 
-  
+  deleteReservation(resId: number) {
+    console.log(resId);
+   return this.http.delete(`${BACKEND_URL}/reservation/${resId}`);
+  }
+
+
 
 }

@@ -12,13 +12,15 @@ import { Room } from 'src/app/models/room';
   styleUrls: ['./seats.component.css']
 })
 export class SeatsComponent implements OnInit {
+seatId: number = 0;
+  
+  /*** HostListener for window load event */
+  @HostListener('window:load', ['$event'])
+  onWindowLoad(event: Event): void {
+    this.router.navigate(['/settings']);  
+  }
 
- // HostListener for window load event
- @HostListener('window:load', ['$event'])
- onWindowLoad(event: Event): void {
-  this.router.navigate(['/settings']);  }
-
-/***array */
+  /*** Arrays */
   departments: string[] = ['Software', 'Reseau'];
   rooms: Room[] = [];
   selectedRoom: any = {};
@@ -26,17 +28,22 @@ export class SeatsComponent implements OnInit {
   user: any = JSON.parse(localStorage.getItem('user') || '{}');
   seats: any[] = [];
   reservations: any[] = [];
-room: any = {}
-/***string */
-selectedDepartment: string | null = null;
-selectedDate: string = "";
+  room: any = {};
+  
+  /*** Strings */
+  selectedDepartment: string | null = null;
+  selectedDate = new Date().toISOString().split('T')[0];
 
-/***boolean */
-display: boolean = false;
+  /*** Booleans */
+  display: boolean = false;
+  displayCancelDialog: boolean = false; // For cancel confirmation dialog
+  search: boolean = false;
+  
+  seatToCancel: any = null; // The seat to cancel
+  selectedRoomName: string | null = null;
 
-search : boolean = false
   constructor(
-    private router: Router , 
+    private router: Router, 
     private route: ActivatedRoute,
     private seatService: SeatService,
     private reservationService: ReservationService,
@@ -45,40 +52,59 @@ search : boolean = false
   ) {}
 
   ngOnInit() {
-   this.seatService.getlistSeats().subscribe((res)=>{    
-    this.room= res
-     // this.selectedRoom = res.name
-      this.seats = res.seats
-      //this.getRooms();
-      this.selectedRoom = res.name
-    })
-    
-    // this.getRooms();
-    // this.getReservations(); 
+    // Get department and room from route parameters
+    this.route.params.subscribe(params => {
+      this.selectedDepartment = params['department'];
+      this.selectedRoomName = params['room'];
+      this.getRooms();
+    });
   }
 
   getRooms() {
     if (this.selectedDepartment) {
-      this.roomService.getDepartementWithRooms(this.selectedDepartment).subscribe((data: any) => {        
-        this.rooms = data;
+      this.roomService.getDepartementWithRooms(this.selectedDepartment).subscribe((data: any) => {
+        this.rooms = data; 
+        this.selectedRoom = this.rooms[0] || null;
+        this.getSeats(); // Fetch seats based on selected room
+      }, error => {
+        console.error('Error fetching rooms:', error);
       });
     }
   }
 
-
   getSeats() {
-    if (this.selectedRoom) {
+    if (this.selectedRoom && this.selectedRoom.id) {
       this.seatService.getSeatsByRoom(this.selectedRoom.id).subscribe((data: any) => {
-
-        
         this.seats = data.seats || [];
-        this.getReservations();
+        this.getReservations(); // Fetch reservations after getting seats
+      }, error => {
+        console.error('Error fetching seats:', error);
       });
+    }
+  }
+
+  confirmCancelReservation() {
+    this.reservationService.deleteReservation(this.seatToCancel.id).subscribe({
+      next: () => {
+        this.displayCancelDialog = false; // Hide cancel confirmation dialog
+        this.getReservations(); // Refresh reservations after cancellation
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Reservation cancelled!' });
+      },
+      error: (error) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errors[0] });
+      }
+    });
+  }
+
+  onCancelReservation(reservationId: number) {
+    this.seatToCancel = this.seats.find(seat => seat.id === reservationId);
+    if (this.seatToCancel) {
+      this.displayCancelDialog = true; // Show cancel confirmation dialog
     }
   }
 
   getReservations() {
-    this.reservationService.getReservationByDate(new Date().toISOString().split('T')[0]).subscribe((data: any) => {
+    this.reservationService.getReservationByDate(this.selectedDate).subscribe((data: any) => {
       this.reservations = data;
       if (this.seats.length) {
         this.seats.forEach((seat: any) => {
@@ -100,17 +126,16 @@ search : boolean = false
   }
 
   onDepartmentChange() {
-    this.rooms = [];
     this.selectedRoom = null;
-    this.seats = [];
     this.getRooms();
   }
-
+  
   onRoomChange() {
     this.getSeats();
   }
 
-  onDateChange() {
+  onDateChange(event: any) {
+    this.selectedDate = event?.target?.value;
     this.getReservations(); 
   }
 
@@ -126,17 +151,15 @@ search : boolean = false
     }
 
     const reservation = {
-      seat: {
-        id: this.selectedSeat.id
-      },
-      user: {
-        id: this.user.id
-      },
-      date:new Date().toISOString().split('T')[0] // Only keep the date part
+      seat: { id: this.selectedSeat.id },
+      user: { id: this.user.id },
+      date: this.selectedDate
     };
 
     this.reservationService.createReservation(reservation).subscribe({
       next: (response) => {
+        console.log(response);
+        
         this.selectedSeat.reserved = true;
         this.selectedSeat.reservedBy = this.user.firstName + ' ' + this.user.lastName;
         this.display = false; 
@@ -148,4 +171,7 @@ search : boolean = false
       }
     });
   }
+
+
+ 
 }

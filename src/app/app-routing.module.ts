@@ -10,7 +10,8 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full',},
   { path: 'login', component: LoginComponent },
-  { path: 'seats', component: SeatsComponent , canActivate: [AuthGuard] },
+  // { path: 'seats', component: SeatsComponent , canActivate: [AuthGuard] },
+  { path: 'seats/:department/:room', component: SeatsComponent ,canActivate: [AuthGuard] },
   { path: 'settings', component: SettingsComponent  , canActivate: [AuthGuard] },
   { path: 'seats/:date', component: SeatsComponent , canActivate: [AuthGuard] },
 

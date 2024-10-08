@@ -1,79 +1,88 @@
-
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
   <h1 class="text-2xl font-bold leading-9 mt-8 text-primary" *ngIf="!search">
-    Select your seat from department {{room.department}} and room {{room.name}}  </h1>
-  <ng-container >
-  <p class="text-gray-500 mb-4">
-    Please select a department and a room .
-  </p>
+    Select your seat from department {{ selectedDepartment || '...' }} and room {{ selectedRoom?.name || '...' }}
+  </h1>
 
-  <div class="grid grid-cols-12 gap-4 mt-8" >
-    <div class="col-span-6">
-      <div class="flex items-center">
-        <label for="department" class="block text-sm font-medium text-gray-700 mr-6">Department:</label>
-        <select id="department" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()"
-          class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
-          <option value="" disabled selected>Select Department</option>
-          <option *ngFor="let department of departments" [value]="selectedDepartment">{{ department }}</option>
-        </select>
-      </div>
-    </div>
-    
-    <div class="col-span-6" *ngIf="selectedDepartment">
-      <div class="flex items-center">
-        <label for="room" class="block text-sm font-medium text-gray-700 mr-3">Room:</label>
-        <select id="room" [(ngModel)]="selectedRoom" (change)="onRoomChange()"
-          class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-          [disabled]="!selectedDepartment">
-          <option value="" disabled selected>Select Room</option>
-          <option *ngFor="let room of rooms" [ngValue]="selectedRoom">{{ room.name }}</option>
-        </select>
-      </div>
-    </div>
+  <ng-container>
+    <p class="text-gray-500 mb-4">Please select a department and a room.</p>
 
-    <div class="col-span-6" *ngIf="selectedRoom">
-      <div class="flex items-center">
-        <label for="room" class="block text-sm font-medium text-gray-700 mr-11">Date:</label>
-        <input 
-        type="date" 
-        class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
-        [(ngModel)]="selectedDate" 
-        (change)="onDateChange()">
+    <div class="grid grid-cols-12 gap-4 mt-8">
+      <div class="col-span-6">
+        <div class="flex items-center">
+          <label for="department" class="block text-sm font-medium text-gray-700 mr-6">Department:</label>
+          <select id="department" [(ngModel)]="selectedDepartment" (change)="onDepartmentChange()"
+            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
+            <option value="" disabled selected>Select Department</option>
+            <option *ngFor="let department of departments" [value]="department">{{ department }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="col-span-6">
+        <div class="flex items-center">
+          <label for="room" class="block text-sm font-medium text-gray-700 mr-3">Room:</label>
+          <select id="room" [(ngModel)]="selectedRoom" (change)="onRoomChange()" [disabled]="!selectedDepartment"
+            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6">
+            <option value="" disabled selected>Select Room</option>
+            <option *ngFor="let room of rooms" [ngValue]="room">{{ room.name }}</option>
+          </select>
+        </div>
       </div>
       
+      <div class="col-span-6">
+        <div class="flex items-center">
+          <label for="date" class="block text-sm font-medium text-gray-700 mr-11">Date:</label>
+          <input 
+            type="date" 
+            class="block px-2 w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6"
+            [(ngModel)]="selectedDate" 
+            (change)="onDateChange($event)"
+            [disabled]="!selectedRoom">
+        </div>
+      </div>
     </div>
-  </div>
-
-</ng-container>
-
-  <div class="grid grid-cols-6 mt-8 gap-4" *ngIf="selectedDate">
-    <!-- <button 
-      class="bg-primary text-white font-bold py-2 px-4 rounded" 
-      (click)="getSeatsForDate()">View Available Seats</button> -->
-  </div>
+  </ng-container>
 
   <p class="text-gray-500 mb-4 mt-4">Select your seat</p>
 
-  <div class="grid grid-cols-6 mt-8 gap-4" *ngIf="seats?.length">
-    <div *ngFor="let seat of seats" class="flex flex-col justify-center items-center py-8 border-2 border-gray-200" [ngClass]="{'bg-green-100': seat.id === selectedSeat.id, 'bg-sky-200': seat.reserved}">
-      <div class="text-center">
-        <p>{{ seat.name }}</p>
-        <p>{{ seat.reference }}</p>
-        <button (click)="selectSeat(seat)" class="bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded">
-          Select
+  <div class="grid grid-cols-6 mt-4 gap-2 border-2 border-gray-200" *ngIf="seats?.length">
+    
+    <div *ngFor="let seat of seats" class="relative chair-seat">
+      <div class="chair" [ngClass]="{'bg-gray-400': seat.reserved}" 
+           (click)="!seat.reserved && selectSeat(seat)" 
+           [title]="seat.reserved ? 'Reserved by ' + seat.reservedBy : ''"
+           (mouseenter)="seat.hover = true" 
+           (mouseleave)="seat.hover = false">
+        <i class="fas fa-chair" [ngClass]="{'text-gray-400': seat.reserved, 'text-black': !seat.reserved}"></i>
+        <p class="seat-reference">{{ seat.reference }}</p>
+    
+        <!-- Cancel button positioned in the center on hover -->
+        <button *ngIf="seat.reserved && seat.hover" class="absolute inset-0 flex justify-center items-center text-red-500">
+          <i class="fas fa-times" (click)="onCancelReservation(seat.id)"></i>
         </button>
       </div>
     </div>
-  </div>
+    
 
-  <!-- Confirmation dialog -->
-  <p-dialog header="Seat Reservation" [(visible)]="display" [modal]="true" [closable]="false" [resizable]="false" [baseZIndex]="10000" [style]="{width: '450px'}">
-    <p>
-      Do you want to reserve seat {{selectedSeat.reference}}? 
-    </p>
-    <div class="flex justify-end mt-4">
-      <button type="button" class="bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded" (click)="reserveSeat()">Yes</button>
-      <button type="button" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-4 rounded ml-4" (click)="display = false">No</button>
-    </div>
-  </p-dialog>
+    <!-- Confirmation dialog for seat reservation -->
+    <p-dialog header="Seat Reservation" [(visible)]="display" [modal]="true" [closable]="false" [resizable]="false" [baseZIndex]="10000" [style]="{width: '450px'}">
+      <p>
+        Do you want to reserve seat {{selectedSeat?.reference}}? 
+      </p>
+      <div class="flex justify-end mt-4">
+        <button type="button" class="bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded" (click)="reserveSeat()">Yes</button>
+        <button type="button" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-4 rounded ml-4" (click)="display = false">No</button>
+      </div>
+    </p-dialog>
+
+    <p-dialog header="Cancel Reservation" [(visible)]="displayCancelDialog" [modal]="true" [closable]="false" [resizable]="false" [baseZIndex]="10000" [style]="{width: '450px'}">
+      <p>
+        Are you sure you want to cancel the reservation for seat <b>{{seatToCancel?.reference}} </b>reserved by <b>{{seatToCancel?.reservedBy}}</b>?
+      </p>
+      <div class="flex justify-end mt-4">
+        <button type="button" class="bg-primary hover:bg-primary text-white font-bold py-1 px-4 rounded" (click)="reserveSeat()">Yes</button>
+        <button type="button" class="bg-orange-500 hover:bg-orange-700 text-white font-bold py-1 px-4 rounded ml-4" (click)="displayCancelDialog = false">No</button>
+      </div>
+    </p-dialog>
+  </div>
 </div>
