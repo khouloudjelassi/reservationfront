@@ -39,3 +39,7 @@ body {
     padding: 0.5rem 1rem;  /* Optional: Adjust button padding */
     font-weight: 500;      /* Optional: Match font weight */
   }
+
+  .btn{
+    margin-left: 70px;
+  }

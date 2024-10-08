@@ -20,6 +20,8 @@ export class ReservationService {
   }
 
   createReservation(reservation: any) {
+    console.log(reservation);
+    
     return this.http.post(`${BACKEND_URL}/reservation`, reservation);
   }
 

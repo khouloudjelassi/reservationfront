@@ -33,6 +33,7 @@ seatId: number = 0;
   /*** Strings */
   selectedDepartment: string | null = null;
   selectedDate = new Date().toISOString().split('T')[0];
+  dep: string ="";
 
   /*** Booleans */
   display: boolean = false;
@@ -52,20 +53,32 @@ seatId: number = 0;
   ) {}
 
   ngOnInit() {
+    this.getR()
+
     // Get department and room from route parameters
     this.route.params.subscribe(params => {
       this.selectedDepartment = params['department'];
       this.selectedRoomName = params['room'];
       this.getRooms();
+
     });
   }
+
+  getR(){
+    if(this.dep){
+    this.roomService.getDepartementWithRooms(this.dep).subscribe((data : any) => { 
+      this.room =data
+      console.log("data",this.room.capacity);
+
+    })
+  }}
 
   getRooms() {
     if (this.selectedDepartment) {
       this.roomService.getDepartementWithRooms(this.selectedDepartment).subscribe((data: any) => {
         this.rooms = data; 
         this.selectedRoom = this.rooms[0] || null;
-        this.getSeats(); // Fetch seats based on selected room
+        this.getSeats(); 
       }, error => {
         console.error('Error fetching rooms:', error);
       });
@@ -74,14 +87,16 @@ seatId: number = 0;
 
   getSeats() {
     if (this.selectedRoom && this.selectedRoom.id) {
-      this.seatService.getSeatsByRoom(this.selectedRoom.id).subscribe((data: any) => {
-        this.seats = data.seats || [];
-        this.getReservations(); // Fetch reservations after getting seats
-      }, error => {
-        console.error('Error fetching seats:', error);
-      });
+        this.seatService.getSeatsByRoom(this.selectedRoom.id).subscribe((data: any) => {
+            this.seats = data.seats || [];
+            console.log('Fetched Seats:', this.seats); // Log the fetched seats
+            this.getReservations();
+        }, error => {
+            console.error('Error fetching seats:', error);
+        });
     }
-  }
+}
+
 
   confirmCancelReservation() {
     this.reservationService.deleteReservation(this.seatToCancel.id).subscribe({
@@ -97,7 +112,11 @@ seatId: number = 0;
   }
 
   onCancelReservation(reservationId: number) {
+    console.log(reservationId, 'reservationIdreservationIdreservationId');
+    
     this.seatToCancel = this.seats.find(seat => seat.id === reservationId);
+    console.log(this.seatToCancel);
+    
     if (this.seatToCancel) {
       this.displayCancelDialog = true; // Show cancel confirmation dialog
     }
@@ -141,36 +160,75 @@ seatId: number = 0;
 
   selectSeat(seat: any) {
     this.selectedSeat = seat;
+    console.log("Selected Seat:",this.selectedSeat);
+    
     this.display = true; 
   }
 
+
+  // reserveSeat() {
+  //   if (!this.selectedSeat) {
+  //     alert('Please select a seat.');
+  //     return;
+  //   }
+
+  //   const    reservation = {
+  //     seat: { id: this.selectedSeat.id },
+  //     user: { id: this.user.id },
+  //     date: this.selectedDate
+  //   };
+    
+  //   this.reservationService.createReservation(reservation).subscribe({
+  //     next: (response) => {
+  //       console.log(response);
+        
+  //       this.selectedSeat.reserved = true;
+
+  //       this.selectedSeat.reservedBy = this.user.firstName + ' ' + this.user.lastName;
+  //       this.display = false; 
+  //       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Reservation successful!' });
+  //       this.getReservations(); 
+  //     },
+  //     error: (error) => {
+  //       this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errors[0] });
+  //     }
+  //   });
+  // }
   reserveSeat() {
     if (!this.selectedSeat) {
-      alert('Please select a seat.');
-      return;
+        alert('Please select a seat.');
+        return;
     }
+    console.log('Before Reserving:', this.selectedSeat); // Add this line
 
     const reservation = {
-      seat: { id: this.selectedSeat.id },
-      user: { id: this.user.id },
-      date: this.selectedDate
+        // seat: { id: this.seatToCancel ? this.seatToCancel?.id : this.selectedSeat.id },
+        // user: { id: this.user.id },
+        // date: this.selectedDate
+        
+    userId: this.user.id,
+    seatId:this.seatToCancel ? this.seatToCancel?.id : this.selectedSeat.id,
+    reservationDate:this.selectedDate
+
     };
+console.log("zzzzzzzzzz",this.seatToCancel)
+
+    console.log('Reservation Payload:', reservation); // Log the reservation payload
 
     this.reservationService.createReservation(reservation).subscribe({
-      next: (response) => {
-        console.log(response);
-        
-        this.selectedSeat.reserved = true;
-        this.selectedSeat.reservedBy = this.user.firstName + ' ' + this.user.lastName;
-        this.display = false; 
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Reservation successful!' });
-        this.getReservations(); 
-      },
-      error: (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errors[0] });
-      }
+        next: (response) => {
+            console.log(response);
+            this.selectedSeat.reserved = true;
+            this.selectedSeat.reservedBy = `${this.user.firstName} ${this.user.lastName}`;
+            this.display = false; 
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Reservation successful!' });
+            this.getReservations(); 
+        },
+        error: (error) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.errors[0] });
+        }
     });
-  }
+}
 
 
  
